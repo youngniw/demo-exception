@@ -33,7 +33,7 @@ public class MemberController {
         return ResponseEntity.ok(null);
     }
 
-    // 회원 정보 갱신 (: 이름 변경)
+    // 회원 정보 갱신 (: 비밀번호 변경)
     @PutMapping("/{memberId}/password")
     public ResponseEntity<Object> changePassword(@PathVariable("memberId") Long memberId,
                                                  @RequestBody @Valid PasswordDto passwordDto) {

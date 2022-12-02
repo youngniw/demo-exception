@@ -17,6 +17,7 @@ import javax.validation.Valid;
 public class AuthController {
     private final MemberService memberService;
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<MemberDto> login(@RequestBody @Valid LoginDto loginDto) {
         MemberDto memberDto = memberService.login(loginDto);
@@ -24,6 +25,7 @@ public class AuthController {
         return ResponseEntity.ok(memberDto);
     }
 
+    // 회원가입
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody @Valid RegisterDto registerDto) {
         memberService.saveMember(registerDto);
