@@ -43,4 +43,13 @@ public class ResponseExceptionHandler {
     protected ErrorResponse badRequestException(BadRequestException exception) {
         return new ErrorResponse(exception.getErrorCode());
     }
+
+    // 전체 예외 처리
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = { Exception.class })
+    protected ErrorResponse handleAllException(Exception ex) {
+        log.warn(ex.getMessage());
+
+        return new ErrorResponse(ErrorCode.ALL_INTERNAL_EXCEPTION);
+    }
 }
