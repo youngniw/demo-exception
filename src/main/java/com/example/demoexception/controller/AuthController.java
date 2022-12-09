@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,8 +30,12 @@ public class AuthController {
     // 회원가입
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody @Valid RegisterDto registerDto) {
-        memberService.saveMember(registerDto);
+        Long memberId = memberService.saveMember(registerDto);
 
-        return ResponseEntity.ok(null);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{memberId}")
+                .buildAndExpand(memberId)
+                .toUri();
+        return ResponseEntity.created(uri).build();
     }
 }

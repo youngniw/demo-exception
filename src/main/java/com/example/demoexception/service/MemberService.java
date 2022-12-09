@@ -25,10 +25,14 @@ public class MemberService {
     }
 
     // 회원 정보 추가
-    public void saveMember(RegisterDto registerDto) {
-        memberRepository.findByName(registerDto.getName())
-                .ifPresent(member1 -> {
-                    throw BadRequestException.ALREADY_EXIST_MEMBER;
+    public Long saveMember(final RegisterDto registerDto) {
+        // 이름이나 로그인 아이디가 이미 있을 시, 회원가입 안됨
+        memberRepository.findByNameOrLoginId(registerDto.getName(), registerDto.getLoginId())
+                .ifPresent(member -> {
+                    if (member.getName().equals(registerDto.getName()))
+                        throw BadRequestException.ALREADY_EXIST_MEMBER_NAME;
+                    else
+                        throw BadRequestException.ALREADY_EXIST_LOGIN_ID;
                 });
 
         Member member = Member.builder()
@@ -38,7 +42,9 @@ public class MemberService {
                 .birthYear(registerDto.getBirthYear())
                 .build();
 
-        memberRepository.save(member);
+        Member saveMember = memberRepository.save(member);
+
+        return saveMember.getMemberId();
     }
 
     public MemberDto getMemberInfo(Long memberId) {
